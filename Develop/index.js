@@ -1,5 +1,6 @@
 const https = require('https');
 var GitHubApi = require("github");
+const prompts = require('prompts');
 
 
 const testArr = {
@@ -49,7 +50,7 @@ function GitApiCall() {
 
   this.callApi = () => {
     if(userNameUrl != undefined || userNameUrl != null) {
-      https.get(url, (resp) => {
+      https.get(userNameUrl, (resp) => {
         let data = '';
       
         // A chunk of data has been recieved.
@@ -59,7 +60,7 @@ function GitApiCall() {
       
         // The whole response has been received. Print out the result.
         resp.on('end', () => {
-          this.profileData = data;
+          this.profileData = JSON.parse(data);
           console.log(JSON.parse(data).explanation);
         });
       
@@ -76,11 +77,31 @@ function GitApiCall() {
 
 
 // Prompts user to answer questions
-function GetUserAnswers() {
-  this.answers = [];
+function GetUserAnswers() {  
+  this.title = "",
+  this.description = "",
+  // this.tableOfContents = "",
+  // this.installation = "",
+  // this.usage = "",
+  // this.license = "",
+  // this.contributing = "",
+  // this.tests = "",
+  // this.questions = ""
   
-  this.askQuestions() {
-    
+
+  this.askQuestions = () => {
+    (async () => {
+      this.title = await prompts("What should your ReadMe title be?");
+      this.description = await prompts("What should your ReadMe description be?");
+      // this.tableOfContents = await prompts("What should your ReadMe {---} be?");
+      // this.installation = await prompts("What should your ReadMe {---} be?");
+      // this.usage = await prompts("What should your ReadMe {---} be?");
+      // this.license = await prompts("What should your ReadMe {---} be?");
+      // this.contributing = await prompts("What should your ReadMe {---} be?");
+      // this.tests = await prompts("What should your ReadMe {---} be?");
+      // this.questions = await prompts("What should your ReadMe {---} be?");
+    })();
+
   }
 
 
