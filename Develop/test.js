@@ -25,3 +25,18 @@ github.authenticate({
 github.repos.getAll({}, function(err, list) {
     console.log( list );
 });
+
+
+// git profile api [ https://api.github.com/users/${user} ]  \\
+
+// const userGitReadMe = {
+//   title: "",
+//   description: "",
+//   tableOfContents: "",
+//   installation: "",
+//   usage: "",
+//   license: "",
+//   contributing: "",
+//   tests: "",
+//   questions = ""
+// }
