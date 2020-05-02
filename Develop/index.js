@@ -1,44 +1,98 @@
 const https = require('https');
+var GitHubApi = require("github");
 
-// git profile api [ https://api.github.com/users/${user} ]  \\
 
-const userGitReadMe = {
-  this.title: "",
-  description: "",
-  tableOfContents: "",
-  installation: "",
-  usage: "",
-  license: "",
-  contributing: "",
-  tests: "",
-  questions = ""
+const testArr = {
+  "login": "Shbibby",
+  "id": 60363855,
+  "node_id": "MDQ6VXNlcjYwMzYzODU1",
+  "avatar_url": "https://avatars2.githubusercontent.com/u/60363855?v=4",
+  "gravatar_id": "",
+  "url": "https://api.github.com/users/Shbibby",
+  "html_url": "https://github.com/Shbibby",
+  "followers_url": "https://api.github.com/users/Shbibby/followers",
+  "following_url": "https://api.github.com/users/Shbibby/following{/other_user}",
+  "gists_url": "https://api.github.com/users/Shbibby/gists{/gist_id}",
+  "starred_url": "https://api.github.com/users/Shbibby/starred{/owner}{/repo}",
+  "subscriptions_url": "https://api.github.com/users/Shbibby/subscriptions",
+  "organizations_url": "https://api.github.com/users/Shbibby/orgs",
+  "repos_url": "https://api.github.com/users/Shbibby/repos",
+  "events_url": "https://api.github.com/users/Shbibby/events{/privacy}",
+  "received_events_url": "https://api.github.com/users/Shbibby/received_events",
+  "type": "User",
+  "site_admin": false,
+  "name": "Joshua Stillion",
+  "company": null,
+  "blog": "https://shbibby.github.io/08updatedPortfolio/",
+  "location": "Cumming Ga",
+  "email": null,
+  "hireable": null,
+  "bio": "Currently a student in a full stack development bootcamp for Georgia Tech. I love problem solving, design, and just making stuff in general. ",
+  "public_repos": 14,
+  "public_gists": 0,
+  "followers": 9,
+  "following": 8,
+  "created_at": "2020-01-27T19:33:00Z",
+  "updated_at": "2020-05-02T02:29:43Z"
 }
 
+// Github API Caller
+function GitApiCall() {
+  this.userNameUrl = undefined;
+  this.profileData = undefined;
 
-function HttpGet(url) {
-  this.url = url;
-  this.gitData = undefined;
-
-  this.callEndPoint = () => {
-    https.get(this.url, (resp) => {
-      let data = '';
-    
-      // A chunk of data has been recieved.
-      resp.on('data', (chunk) => {
-        data += chunk;
-      });
-    
-      // The whole response has been received. Print out the result.
-      resp.on('end', () => {
-        this.getData = data;
-        console.log(JSON.parse(data).explanation);
-      });
-    
-    }).on("error", (err) => {
-      console.log("Error: " + err.message);
-    });
+  this.getNameMakeUrl = () => {
+    // prompt user
+    const userResponse = String("");
+    const url = `https://api.github.com/users/${userResponse}`
   }
+
+  this.callApi = () => {
+    if(userNameUrl != undefined || userNameUrl != null) {
+      https.get(url, (resp) => {
+        let data = '';
+      
+        // A chunk of data has been recieved.
+        resp.on('data', (chunk) => {
+          data += chunk;
+        });
+      
+        // The whole response has been received. Print out the result.
+        resp.on('end', () => {
+          this.profileData = data;
+          console.log(JSON.parse(data).explanation);
+        });
+      
+      }).on("error", (err) => {
+        console.log("Error: " + err.message);
+      });
+    }
+  }
+
   
 }
+// Github API Caller
+
+
+
+// Prompts user to answer questions
+function GetUserAnswers() {
+  this.answers = [];
+  
+  this.askQuestions() {
+    
+  }
+
+
+}
+// Prompts user to answer questions
+
+
+const shibibbyGit = new GitApiCall();
+shibibbyGit.getUserProfileData(`https://api.github.com/users/Shbibby`);
+
+
+
+
 
 
