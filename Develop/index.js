@@ -1,6 +1,4 @@
-const https = require('https');
-// var GitHubApi = require("github");
-const prompt = require('prompt');
+const inquirer = require('inquirer')
 const prompt = require('axios');
 
 
@@ -44,16 +42,16 @@ function GitApiCall() {
   this.userNameUrl = undefined;
   this.profileData = undefined;
 
-  this.getNameMakeUrl = () => {
+  this.getNameMakeUrl = (gitName) => {
     // prompt user
-    const userResponse = String("");
+    const userResponse = gitName;
     const url = `https://api.github.com/users/${userResponse}`
     return url;
   }
 
   // await this.callApi()
   this.callApi = (callApiUrl) => {
-    if(userNameUrl != undefined || userNameUrl != null) {
+    if(userNameUrl != undefined && userNameUrl != null) {
       return axios 
         .get(callApiUrl)
         .then((response) => {
@@ -62,59 +60,67 @@ function GitApiCall() {
         .catch((error) => {
           console.log("Error: ", error)
         });
+      
     }
-
-  
   }
+}
 // Github API Caller
 
+
+// ReadMe Template
+const readMeTemplate = {
+  badge: "",
+  title: "My Awesome Title",
+  description: "An app that needs no introduction",
+  tableOfContents: "",
+  installation: "Use the https GitHub download",
+  usage: " \
+  foobar.pluralize('word') # returns 'words' \
+  foobar.pluralize('goose') # returns 'geese' \
+  foobar.singularize('phenomena') # returns 'phenomenon'",
+  license: "[MIT](https://choosealicense.com/licenses/mit/)",
+  contributing: "Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.",
+  tests: "node test tester.test.js",
+  questions: [
+    {Q:"Is this a question", A:"Yes"},
+    {Q:"Is this a also question", A:"No"}],
+  gitHubProfilePicture: "https://avatars2.githubusercontent.com/u/60363855?v=4",
+  gitHubUserEmail: "fakeemail@email.com"
+}
+// ReadMe Template
 
 
 // Prompts user to answer questions
 function GetUserAnswers() {  
-  this.title = "",
-  this.description = "",
-  // this.tableOfContents = "",
-  // this.installation = "",
-  // this.usage = "",
-  // this.license = "",
-  // this.contributing = "",
-  // this.tests = "",
-  // this.questions = ""
-  
+  this.title = "";
+  this.description = "";
 
   this.askQuestions = () => {
-    prompt.start();
-
-    prompt.get([])
-
+    inquirer
+      .prompt([
+        {
+          name: 'readMeTitle',
+          message: 'What would you like your ReadMe title to be?',
+        },
+        {
+          name: 'readMeDescription',
+          message: 'What would you like your ReadMe description to be?',
+        }
+      ])
+      .then(answers => {
+        // Use user feedback for... whatever!!
+      })
+      .catch(error => {
+        if(error.isTtyError) {
+          // Prompt couldn't be rendered in the current environment
+        } else {
+          // Something else when wrong
+        }
+      });
+    // inquirer end
   }
-
-
 }
 // Prompts user to answer questions
 
-// Makes Read me pdf
-
-// Makes Read me pdf
-
-
-
-const myAnswer = new GetUserAnswers();
-myAnswer.askQuestions();
-console.log("hi");
-
-
-
-
-
-
-this.title = await prompt("What should your ReadMe title be?");
-      this.description = await prompt("What should your ReadMe description be?");
-      // this.tableOfContents = await prompts("What should your ReadMe {---} be?");
-      // this.installation = await prompts("What should your ReadMe {---} be?");
-      // this.usage = await prompts("What should your ReadMe {---} be?");
-      // this.license = await prompts("What should your ReadMe {---} be?");
-      // this.contributing = await prompts("What should your ReadMe {---} be?");
-      // this.tests = await prompts("What should your ReadMe {---} be?");
-      // this.questions = await prompts("What should your ReadMe {---} be?");
+const getAnswer = new GetUserAnswers();
+getAnswer.askQuestions();
