@@ -1,5 +1,5 @@
 const inquirer = require('inquirer')
-const prompt = require('axios');
+const axios = require('axios');
 
 
 
@@ -38,11 +38,11 @@ const testArr = {
 }
 
 // Github API Caller
-function GitApiCall() {
+function ApiCall() {
   this.userNameUrl = undefined;
   this.profileData = undefined;
 
-  this.getNameMakeUrl = (gitName) => {
+  this.getNameMakeUrl = function(gitName) {
     // prompt user
     const userResponse = gitName;
     const url = `https://api.github.com/users/${userResponse}`
@@ -50,18 +50,19 @@ function GitApiCall() {
   }
 
   // await this.callApi()
-  this.callApi = (callApiUrl) => {
-    if(userNameUrl != undefined && userNameUrl != null) {
-      return axios 
-        .get(callApiUrl)
-        .then((response) => {
-          console.log("Data: ", response)
-        })
-        .catch((error) => {
-          console.log("Error: ", error)
-        });
-      
-    }
+  this.callApi = function(callApiUrl) {
+    axios 
+      .get(callApiUrl, {
+        headers: {
+          Authorization: "token b3e149b96653aa9873e88a0a9d71ca384fd4f33f"
+        }
+      })
+      .then((response) => {
+        console.log("Data: ", response)
+      })
+      .catch((error) => {
+        console.log("Error: ", error)
+      });
   }
 }
 // Github API Caller
@@ -89,15 +90,70 @@ const readMeTemplate = {
 }
 // ReadMe Template
 
+function GenerateReadMeFile(readMeData) {
+  this.readMeData = readMeData;
+  this.formattedReadMe = "";
+
+  this.getFormattedReadMe = function() {
+    this.formattedReadMe = `
+    # ${this.readMeData.title}
+
+    ${this.readMeData.description}
+    __________________________________________
+    # Table of Contents :
+    
+    1. [Installation] (#Installation)
+    2. [Usage] (#Usage)
+    3. [License] (#License)
+    4. [Contributing] (#Contributing)
+    5. [Tests] (#Tests) 
+    __________________________________________
+
+    ## Installation
+
+    ${this.readMeData.installation}
+
+    ## Usage 
+
+    ${this.readMeData.usage}
+
+    ## License
+
+    ${this.readMeData.license}
+
+    ## Contributing
+
+    ${this.readMeData.contributing}
+
+    ## Tests
+
+    ${this.readMeData.tests}
+    __________________________________________
+    
+    Author email : ${this.readMeData.gitHubUserEmail}
+
+    ![Picture](${this.readMeData.gitHubProfilePicture})
+    `;
+
+    console.log(formattedReadMe);
+  }
+}
+
 
 // Prompts user to answer questions
 function GetUserAnswers() {  
+  this.userName = "";
   this.title = "";
   this.description = "";
 
-  this.askQuestions = () => {
+
+  this.askQuestions = function() {
     inquirer
       .prompt([
+        {
+          name: 'userGitName',
+          message: 'What is your GitHub username?',
+        },
         {
           name: 'readMeTitle',
           message: 'What would you like your ReadMe title to be?',
@@ -108,7 +164,9 @@ function GetUserAnswers() {
         }
       ])
       .then(answers => {
-        // Use user feedback for... whatever!!
+        this.userName = answers.userGitName;
+        this.title = answers.readMeTitle;
+        this.description= answers.readMeDescription;
       })
       .catch(error => {
         if(error.isTtyError) {
@@ -119,8 +177,27 @@ function GetUserAnswers() {
       });
     // inquirer end
   }
+
+  this.storeAnswers = function(readMeData) {
+    readMeData.title = this.title
+  } 
 }
 // Prompts user to answer questions
 
-const getAnswer = new GetUserAnswers();
-getAnswer.askQuestions();
+
+
+async function makeMyFile() {
+  // const getAnswer = new GetUserAnswers();
+  // getAnswer.askQuestions();
+  // readMeTemplate.title = getAnswer.title
+  // readMeTemplate.description = getAnswer.description
+
+  // const apithing = new ApiCall();
+  // apithing.callApi("https://api.github.com/users/Shbibby");
+
+  const makeReadMe = new GenerateReadMeFile(readMeTemplate);
+  makeReadMe.GenerateReadMeFile();
+
+} 
+
+makeMyFile();
