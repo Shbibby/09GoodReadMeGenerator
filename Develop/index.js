@@ -38,11 +38,14 @@ const testArr = {
 }
 
 // Github API Caller
-function ApiCall() {
-  this.userNameUrl = undefined;
-  this.profileData = undefined;
+class ApiCall {
+  constructor() {
+    this.userNameUrl = undefined;
+    this.profileData = undefined;
+  }
 
-  this.getNameMakeUrl = function(gitName) {
+
+  getNameMakeUrl(gitName) {
     // prompt user
     const userResponse = gitName;
     const url = `https://api.github.com/users/${userResponse}`
@@ -50,7 +53,7 @@ function ApiCall() {
   }
 
   // await this.callApi()
-  this.callApi = function(callApiUrl) {
+  callApi(callApiUrl) {
     axios 
       .get(callApiUrl, {
         headers: {
@@ -90,11 +93,13 @@ const readMeTemplate = {
 }
 // ReadMe Template
 
-function GenerateReadMeFile(readMeData) {
-  this.readMeData = readMeData;
-  this.formattedReadMe = "";
-
-  this.getFormattedReadMe = function() {
+class GenerateReadMeFile {
+  constructor(readMeData) {
+    this.readMeData = readMeData;
+    this.formattedReadMe = "";
+  }
+  
+  async getFormattedReadMe() {
     this.formattedReadMe = `
     # ${this.readMeData.title}
 
@@ -141,13 +146,16 @@ function GenerateReadMeFile(readMeData) {
 
 
 // Prompts user to answer questions
-function GetUserAnswers() {  
-  this.userName = "";
-  this.title = "";
-  this.description = "";
+class GetUserAnswers {  
+  constructor() {
+    this.userName = "";
+    this.title = "";
+    this.description = "";
+  }
 
 
-  this.askQuestions = function() {
+
+  async askQuestions() {
     inquirer
       .prompt([
         {
@@ -177,10 +185,6 @@ function GetUserAnswers() {
       });
     // inquirer end
   }
-
-  this.storeAnswers = function(readMeData) {
-    readMeData.title = this.title
-  } 
 }
 // Prompts user to answer questions
 
