@@ -39,17 +39,14 @@ class ApiCall {
 // ReadMe Template
 const readMeTemplate = {
   badge: "",
-  title: "My Awesome Title",
-  description: "An app that needs no introduction",
+  title: "",
+  description: "",
   tableOfContents: "",
   installation: "Use the https GitHub download",
-  usage: " \
-  foobar.pluralize('word') # returns 'words' \
-  foobar.pluralize('goose') # returns 'geese' \
-  foobar.singularize('phenomena') # returns 'phenomenon'",
-  license: "[MIT](https://choosealicense.com/licenses/mit/)",
+  usage: "```sh \nnode index.js \n```",
+  license: "[GitHub License](https://choosealicense.com/licenses/mit/)",
   contributing: "Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.",
-  tests: "node test tester.test.js",
+  tests: "```sh \nnode test tester.test.js \n```",
   questions: [
     {Q:"Is this a question", A:"Yes"},
     {Q:"Is this a also question", A:"No"}],
@@ -59,51 +56,71 @@ const readMeTemplate = {
 // ReadMe Template
 
 class GenerateReadMeFile {
-  constructor(readMeData) {
-    this.readMeData = readMeData;
+  constructor() {
+    readMeData = {
+      badge: "",
+      title: "",
+      description: "",
+      tableOfContents: "",
+      installation: "Use the https GitHub download",
+      usage: "```sh \nnode index.js \n```",
+      license: "[GitHub License](https://choosealicense.com/licenses/mit/)",
+      contributing: "Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.",
+      tests: "```sh \nnode test tester.test.js \n```",
+      questions: [
+        {Q:"Is this a question", A:"Yes"},
+        {Q:"Is this a also question", A:"No"}],
+      gitHubProfilePicture: "https://avatars2.githubusercontent.com/u/60363855?v=4",
+      gitHubUserEmail: "fakeemail@email.com"
+    }
   }
   
-  getFormattedReadMe() {
-    return `
-    # ${this.readMeData.title}
+getFormattedReadMe() {
+return `
+# ${this.readMeData.title}
 
-    ${this.readMeData.description}
-    __________________________________________
-    # Table of Contents :
-    
-    1. [Installation](#Installation)
-    2. [Usage](#Usage)
-    3. [License](#License)
-    4. [Contributing](#Contributing)
-    5. [Tests](#Tests) 
-    __________________________________________
+${this.readMeData.description}
+__________________________________________
+# Table of Contents :
 
-    ## Installation <a name="Installation"></a>
+1. [Installation](#Installation)
+2. [Usage](#Usage)
+3. [License](#License)
+4. [Contributing](#Contributing)
+5. [Tests](#Tests) 
+__________________________________________
 
-    ${this.readMeData.installation}
+## Installation
+______________________________________
 
-    ## Usage 
+${this.readMeData.installation}
 
-    ${this.readMeData.usage}
+## Usage 
+______________________________________
 
-    ## License
+${this.readMeData.usage}
 
-    ${this.readMeData.license}
+## License
+______________________________________
 
-    ## Contributing
+${this.readMeData.license}
 
-    ${this.readMeData.contributing}
+## Contributing
+______________________________________
 
-    ## Tests
+${this.readMeData.contributing}
 
-    ${this.readMeData.tests}
-    __________________________________________
-    
-    Author email : ${this.readMeData.gitHubUserEmail}
+## Tests
+______________________________________
 
-    ![Picture](${this.readMeData.gitHubProfilePicture})
-    `;
-  }
+${this.readMeData.tests}
+__________________________________________
+
+Author email : ${this.readMeData.gitHubUserEmail}
+
+![Picture](${this.readMeData.gitHubProfilePicture})
+`;
+}
 }
 
 
@@ -149,7 +166,7 @@ class GetUserAnswers {
   }
 }
 // Prompts user to answer questions
-
+ 
 async function makeMyFile() {
   const getAnswer = new GetUserAnswers();
   await getAnswer.askQuestions();

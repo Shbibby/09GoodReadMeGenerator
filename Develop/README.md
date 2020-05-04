@@ -1,39 +1,40 @@
 
-    # 
+# 
 
-    
-    __________________________________________
-    # Table of Contents :
-    
-    1. [Installation](#Installation)
-    2. [Usage](#Usage)
-    3. [License](#License)
-    4. [Contributing](#Contributing)
-    5. [Tests](#Tests) 
-    __________________________________________
 
-    ## Installation <a name="Installation"></a>
+__________________________________________
+# Table of Contents :
 
-    Use the https GitHub download
+1. [Installation](#Installation)
+2. [Usage](#Usage)
+3. [License](#License)
+4. [Contributing](#Contributing)
+5. [Tests](#Tests) 
+__________________________________________
 
-    ## Usage 
+## Installation
 
-       foobar.pluralize('word') # returns 'words'   foobar.pluralize('goose') # returns 'geese'   foobar.singularize('phenomena') # returns 'phenomenon'
+Use the https GitHub download
 
-    ## License
+## Usage 
 
-    [MIT](https://choosealicense.com/licenses/mit/)
+npm 
 
-    ## Contributing
+## License
 
-    Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+[MIT](https://choosealicense.com/licenses/mit/)
 
-    ## Tests
+## Contributing
 
-    node test tester.test.js
-    __________________________________________
-    
-    Author email : fakeemail@email.com
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
-    ![Picture](https://avatars2.githubusercontent.com/u/60363855?v=4)
-    
+## Tests
+
+```sh 
+node test tester.test.js 
+```
+__________________________________________
+
+Author email : fakeemail@email.com
+
+![Picture](https://avatars2.githubusercontent.com/u/60363855?v=4)
