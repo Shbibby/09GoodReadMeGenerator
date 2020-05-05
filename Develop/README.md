@@ -13,28 +13,35 @@ __________________________________________
 __________________________________________
 
 ## Installation
+______________________________________
 
 Use the https GitHub download
 
 ## Usage 
+______________________________________
 
-npm 
+```sh 
+node index.js 
+```
 
 ## License
+______________________________________
 
-[MIT](https://choosealicense.com/licenses/mit/)
+[Project License]()
 
 ## Contributing
+______________________________________
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 ## Tests
+______________________________________
 
 ```sh 
 node test tester.test.js 
 ```
 __________________________________________
 
-Author email : fakeemail@email.com
+Author email : 
 
-![Picture](https://avatars2.githubusercontent.com/u/60363855?v=4)
+![Picture]()

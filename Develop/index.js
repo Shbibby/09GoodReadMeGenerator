@@ -5,16 +5,18 @@ const fs = require('fs');
 // Github API Caller
 class ApiCall {
   constructor() {
-    this.userNameUrl = undefined;
-    this.profileData = undefined;
+    this.userNameUrl = "";
+    this.profileData = "";
+
+    this.gitApiEmail = "";
+    this.gitApiPicture = "";
   }
 
 
   getNameMakeUrl(gitName) {
     // prompt user
-    const userResponse = gitName;
-    const url = `https://api.github.com/users/${userResponse}`
-    return url;
+    const url = `https://api.github.com/users/${gitName}`;
+    this.userNameUrl = url;
   }
 
   // await this.callApi()
@@ -26,7 +28,8 @@ class ApiCall {
         }
       })
       .then((response) => {
-        // console.log("Data: ", response)
+        this.gitApiEmail = response.email;
+        this.gitApiPicture = response.avatar_url;
       })
       .catch((error) => {
         // console.log("Error: ", error)
@@ -37,41 +40,41 @@ class ApiCall {
 
 
 // ReadMe Template
-const readMeTemplate = {
-  badge: "",
-  title: "",
-  description: "",
-  tableOfContents: "",
-  installation: "Use the https GitHub download",
-  usage: "```sh \nnode index.js \n```",
-  license: "[GitHub License](https://choosealicense.com/licenses/mit/)",
-  contributing: "Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.",
-  tests: "```sh \nnode test tester.test.js \n```",
-  questions: [
-    {Q:"Is this a question", A:"Yes"},
-    {Q:"Is this a also question", A:"No"}],
-  gitHubProfilePicture: "https://avatars2.githubusercontent.com/u/60363855?v=4",
-  gitHubUserEmail: "fakeemail@email.com"
-}
+// const readMeTemplate = {
+//   badge: "",
+//   title: "",
+//   description: "",
+//   tableOfContents: "",
+//   installation: "Use the https GitHub download",
+//   usage: "```sh \nnode index.js \n```",
+//   license: "[GitHub License](https://choosealicense.com/licenses/mit/)",
+//   contributing: "Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.",
+//   tests: "```sh \nnode test tester.test.js \n```",
+//   questions: [
+//     {Q:"Is this a question", A:"Yes"},
+//     {Q:"Is this a also question", A:"No"}],
+//   gitHubProfilePicture: "https://avatars2.githubusercontent.com/u/60363855?v=4",
+//   gitHubUserEmail: "fakeemail@email.com"
+// }
 // ReadMe Template
 
 class GenerateReadMeFile {
-  constructor() {
-    readMeData = {
+  constructor(getTitle, getDesc, getLicense, getEmail, getPic) {
+    this.readMeData = {
       badge: "",
-      title: "",
-      description: "",
+      title: getTitle,
+      description: getDesc,
       tableOfContents: "",
       installation: "Use the https GitHub download",
       usage: "```sh \nnode index.js \n```",
-      license: "[GitHub License](https://choosealicense.com/licenses/mit/)",
+      license: `[Project License](${getLicense})`,
       contributing: "Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.",
       tests: "```sh \nnode test tester.test.js \n```",
       questions: [
         {Q:"Is this a question", A:"Yes"},
         {Q:"Is this a also question", A:"No"}],
-      gitHubProfilePicture: "https://avatars2.githubusercontent.com/u/60363855?v=4",
-      gitHubUserEmail: "fakeemail@email.com"
+        gitHubUserEmail: getEmail,
+        gitHubProfilePicture: getPic
     }
   }
   
@@ -130,6 +133,7 @@ class GetUserAnswers {
     this.userName = "";
     this.title = "";
     this.description = "";
+    this.license = "";
   }
 
 
@@ -148,12 +152,17 @@ class GetUserAnswers {
         {
           name: 'readMeDescription',
           message: 'What would you like your ReadMe description to be?',
+        },
+        {
+          name: 'readMeLicense',
+          message: 'What is your repository license?',
         }
       ])
       .then(answers => {
         this.userName = answers.userGitName;
         this.title = answers.readMeTitle;
         this.description= answers.readMeDescription;
+        this.license = answers.readMeLicense;
       })
       .catch(error => {
         if(error.isTtyError) {
@@ -168,17 +177,25 @@ class GetUserAnswers {
 // Prompts user to answer questions
  
 async function makeMyFile() {
-  const getAnswer = new GetUserAnswers();
-  await getAnswer.askQuestions();
-  readMeTemplate.title = getAnswer.title
-  readMeTemplate.description = getAnswer.description
+  const GetAnswer = new GetUserAnswers();
+  await GetAnswer.askQuestions();
+  // readMeTemplate.title = GetAnswer.title
+  // readMeTemplate.description = GetAnswer.description
 
-  const apithing = new ApiCall();
-  await apithing.callApi("https://api.github.com/users/Shbibby");
+  const GitHubApiCall = new ApiCall();
+  await GitHubApiCall.getNameMakeUrl(GetAnswer.userName);
+  await GitHubApiCall.callApi(GitHubApiCall.userNameUrl);
 
-  const makeReadMe = new GenerateReadMeFile(readMeTemplate);
-  var x = makeReadMe.getFormattedReadMe();
-  fs.writeFile("./README.md", x, function(err) {if (err) throw err;});
+
+  const title = GetAnswer.title;
+  const desc = GetAnswer.description;
+  const lic = GetAnswer.license;
+  const email = GitHubApiCall.gitApiEmail;
+  const pic = GitHubApiCall.gitApiPicture;
+  
+  const makeReadMe = new GenerateReadMeFile(title,desc,lic,email,pic);
+  var readMeContent = makeReadMe.getFormattedReadMe();
+  fs.writeFile("./README.md", readMeContent, function(err) {if (err) throw err;});
 } 
 
 makeMyFile();
