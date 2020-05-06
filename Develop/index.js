@@ -32,31 +32,11 @@ class ApiCall {
         this.gitApiPicture = response.avatar_url;
       })
       .catch((error) => {
-        // console.log("Error: ", error)
+        throw error;
       });
   }
 }
 // Github API Caller
-
-
-// ReadMe Template
-// const readMeTemplate = {
-//   badge: "",
-//   title: "",
-//   description: "",
-//   tableOfContents: "",
-//   installation: "Use the https GitHub download",
-//   usage: "```sh \nnode index.js \n```",
-//   license: "[GitHub License](https://choosealicense.com/licenses/mit/)",
-//   contributing: "Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.",
-//   tests: "```sh \nnode test tester.test.js \n```",
-//   questions: [
-//     {Q:"Is this a question", A:"Yes"},
-//     {Q:"Is this a also question", A:"No"}],
-//   gitHubProfilePicture: "https://avatars2.githubusercontent.com/u/60363855?v=4",
-//   gitHubUserEmail: "fakeemail@email.com"
-// }
-// ReadMe Template
 
 class GenerateReadMeFile {
   constructor(getTitle, getDesc, getLicense, getEmail, getPic) {
@@ -161,8 +141,13 @@ class GetUserAnswers {
       .then(answers => {
         this.userName = answers.userGitName;
         this.title = answers.readMeTitle;
+        console.log("a" + answers.readMeTitle)
+        console.log("b" + this.title)
+
         this.description= answers.readMeDescription;
         this.license = answers.readMeLicense;
+
+        return this.arr;
       })
       .catch(error => {
         if(error.isTtyError) {
@@ -176,17 +161,19 @@ class GetUserAnswers {
 }
 // Prompts user to answer questions
  
-async function makeMyFile() {
+async function ask() {
   const GetAnswer = new GetUserAnswers();
   await GetAnswer.askQuestions();
-  // readMeTemplate.title = GetAnswer.title
-  // readMeTemplate.description = GetAnswer.description
+}
 
+function api() {
   const GitHubApiCall = new ApiCall();
-  await GitHubApiCall.getNameMakeUrl(GetAnswer.userName);
-  await GitHubApiCall.callApi(GitHubApiCall.userNameUrl);
+  GitHubApiCall.getNameMakeUrl(GetAnswer.userName);
+  GitHubApiCall.callApi(GitHubApiCall.userNameUrl);
+  console.log("c" + GetAnswer.title);
+}
 
-
+function doc() {
   const title = GetAnswer.title;
   const desc = GetAnswer.description;
   const lic = GetAnswer.license;
@@ -198,4 +185,6 @@ async function makeMyFile() {
   fs.writeFile("./README.md", readMeContent, function(err) {if (err) throw err;});
 } 
 
-makeMyFile();
+ask();
+api();
+doc();
