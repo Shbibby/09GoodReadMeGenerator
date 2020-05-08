@@ -2,6 +2,7 @@ const inquirer = require('inquirer');
 const axios = require('axios');
 const fs = require('fs');
 
+
 // Github API Caller
 class ApiCall {
   constructor() {
@@ -14,13 +15,16 @@ class ApiCall {
 
 
   getNameMakeUrl(gitName) {
-    // prompt user
+    // input user prompt username for calling git api later
     const url = `https://api.github.com/users/${gitName}`;
     this.userNameUrl = url;
+
+    return url;
   }
 
-  // await this.callApi()
-  callApi(callApiUrl) {
+ 
+  async callApi(callApiUrl) {
+    // calls git api with user prompt username
     axios 
       .get(callApiUrl, {
         headers: {
@@ -38,7 +42,9 @@ class ApiCall {
 }
 // Github API Caller
 
+//makes template and inputs user text to readMe
 class GenerateReadMeFile {
+  // readMe template
   constructor(getTitle, getDesc, getLicense, getEmail, getPic) {
     this.readMeData = {
       badge: "",
@@ -59,6 +65,7 @@ class GenerateReadMeFile {
   }
   
 getFormattedReadMe() {
+  // injects user input data for customized readMe
 return `
 # ${this.readMeData.title}
 
@@ -105,6 +112,7 @@ Author email : ${this.readMeData.gitHubUserEmail}
 `;
 }
 }
+//makes template and inputs user text to readMe
 
 
 // Prompts user to answer questions
@@ -119,6 +127,7 @@ class GetUserAnswers {
 
 
   async askQuestions() {
+    // asks user for required data in readMe
     inquirer
       .prompt([
         {
@@ -141,50 +150,51 @@ class GetUserAnswers {
       .then(answers => {
         this.userName = answers.userGitName;
         this.title = answers.readMeTitle;
-        console.log("a" + answers.readMeTitle)
-        console.log("b" + this.title)
-
         this.description= answers.readMeDescription;
         this.license = answers.readMeLicense;
 
-        return this.arr;
-      })
-      .catch(error => {
-        if(error.isTtyError) {
-          // Prompt couldn't be rendered in the current environment
-        } else {
-          // Something else when wrong
+        const obj = {
+          userName : answers.userGitName,
+          title : answers.readMeTitle,
+          description : answers.readMeDescription,
+          license : answers.readMeLicense
         }
-      });
+        console.log(obj)
+        return obj;
+
+      })
+      
     // inquirer end
   }
 }
 // Prompts user to answer questions
  
+let answers = {};
 async function ask() {
   const GetAnswer = new GetUserAnswers();
-  await GetAnswer.askQuestions();
-}
+  answers = await GetAnswer.askQuestions();
+}  
 
-function api() {
+async function api() {
+  console.log("api start");
   const GitHubApiCall = new ApiCall();
-  GitHubApiCall.getNameMakeUrl(GetAnswer.userName);
-  GitHubApiCall.callApi(GitHubApiCall.userNameUrl);
-  console.log("c" + GetAnswer.title);
+  const url = GitHubApiCall.getNameMakeUrl(answers.userName);
+  await GitHubApiCall.callApi(url);
+  console.log("api end");
 }
 
-function doc() {
-  const title = GetAnswer.title;
-  const desc = GetAnswer.description;
-  const lic = GetAnswer.license;
+function make() {
+  console.log("make start");
+  const title = answers.title;
+  const desc = answers.description;
+  const lic = answers.license;
   const email = GitHubApiCall.gitApiEmail;
   const pic = GitHubApiCall.gitApiPicture;
   
   const makeReadMe = new GenerateReadMeFile(title,desc,lic,email,pic);
   var readMeContent = makeReadMe.getFormattedReadMe();
   fs.writeFile("./README.md", readMeContent, function(err) {if (err) throw err;});
+  console.log("make end");
 } 
 
-ask();
-api();
-doc();
+ask().then(api()).then(make()); // api & make not waiting for ask to finish before running
