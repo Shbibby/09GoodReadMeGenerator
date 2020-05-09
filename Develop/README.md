@@ -1,7 +1,7 @@
 
-# 
+# Title
 
-
+Desc
 __________________________________________
 # Table of Contents :
 
@@ -27,7 +27,7 @@ node index.js
 ## License
 ______________________________________
 
-[Project License]()
+[Project License](Lic)
 
 ## Contributing
 ______________________________________
@@ -42,6 +42,8 @@ node test tester.test.js
 ```
 __________________________________________
 
-Author email : 
+[Author Git Repository](https://api.github.com/users/Shbibby/09NodeJS)
 
-![Picture]()
+Author email : Joshstilion@gmail.com
+
+![Picture](undefined)
